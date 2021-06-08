@@ -34,6 +34,7 @@ class _MainScreenState extends State<MainScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Groceries Store'),
+        backgroundColor: Colors.blue,
       ),
       body: Center(
         child: Container(
@@ -83,7 +84,7 @@ class _MainScreenState extends State<MainScreen> {
                                           padding:
                                               EdgeInsets.fromLTRB(10, 0, 0, 0),
                                           child: Text(
-                                              "Product ID: " +
+                                              "ID: " +
                                                   _productList[index]['prid'],
                                               style: TextStyle(fontSize: 16))),
                                       SizedBox(height: 2),
@@ -130,15 +131,6 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  /*Future<void> _loadPref() async {
-    prefs = await SharedPreferences.getInstance();
-    email = prefs.getString("email") ?? '';
-    print(email);
-    if (email == '') {
-      _loademaildialog();
-    } else {}
-  }*/
-
   _loadProduct() {
     http.post(
         Uri.parse(
@@ -158,11 +150,11 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-    _searchProduct(String prname) {
+  _searchProduct(String prname) {
     http.post(
         Uri.parse(
             "https://javathree99.com/s269926/alloutgroceries/php/loadproduct.php"),
-        body: {"prname":prname}).then((response) {
+        body: {"prname": prname}).then((response) {
       if (response.body == "nodata") {
         _titlecenter = "Sorry no product";
         _productList = [];
@@ -176,14 +168,6 @@ class _MainScreenState extends State<MainScreen> {
       }
     });
   }
-
-  /*String titleSub(productList) {
-    if (title.length > 15) {
-      return title.substring(0, 15) + "...";
-    } else {
-      return title;
-    }
-  }*/
 
   void _loademaildialog() {}
 }
