@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: CustomTheme.lighttheme,
+      //theme: CustomTheme.lighttheme,
       title: 'Material App',
       home: SplashScreen());
   }

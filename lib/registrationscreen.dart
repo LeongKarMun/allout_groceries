@@ -127,7 +127,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void _alreadyRegister() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        context, MaterialPageRoute(builder: (context) =>LoginScreen()));
   }
 
   void _onRegister() {

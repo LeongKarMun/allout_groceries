@@ -5,7 +5,10 @@ import 'mainscreen.dart';
 import 'registrationscreen.dart';
 import 'package:http/http.dart' as http;
 
+import 'user.dart';
+
 class LoginScreen extends StatefulWidget {
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -17,14 +20,13 @@ class _LoginScreenState extends State<LoginScreen> {
   late SharedPreferences prefs;
 
   @override
-  void initState(){
+  void initState() {
     loadPref();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'All-out Groceries',
       home: Scaffold(
@@ -66,26 +68,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Checkbox(
                             value: _rememberMe,
-                            onChanged:(bool? value){
+                            onChanged: (bool? value) {
                               _onChange(value!);
-                            }
-                            ),
+                            }),
                         Text("Remember Me")
                       ],
                     ),
                     MaterialButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        minWidth: 100,
-                        height: 40,
-                        child: Text('Login',
-                            style: TextStyle(
-                              color: Colors.white,
-                            )),
-                        onPressed: _onLogin,
-                        color: Colors.blue,
-                        ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      minWidth: 100,
+                      height: 40,
+                      child: Text('Login',
+                          style: TextStyle(
+                            color: Colors.white,
+                          )),
+                      onPressed: _onLogin,
+                      color: Colors.blue,
+                    ),
                     SizedBox(height: 10),
                   ],
                 ),
@@ -137,18 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
             "http://javathree99.com/s269926/alloutgroceries/php/login_user.php"),
         body: {"email": _email, "password": _password}).then((response) {
       print(response.body);
-      if (response.body == "success") {
-        Fluttertoast.showToast(
-            msg:
-                "Login success.",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Color.fromRGBO(191, 30, 46, 50),
-            textColor: Colors.white,
-            fontSize: 16.0);
-        Navigator.push(context, MaterialPageRoute(builder: (content) => MainScreen()));
-      } else {
+      if (response.body == "failed") {
         Fluttertoast.showToast(
             msg: "Login Failed",
             toastLength: Toast.LENGTH_SHORT,
@@ -157,6 +147,14 @@ class _LoginScreenState extends State<LoginScreen> {
             backgroundColor: Color.fromRGBO(191, 30, 46, 50),
             textColor: Colors.white,
             fontSize: 16.0);
+      } else {
+        List userData = response.body.split(",");
+        User user = new User(
+            user_email: _email,
+            username: userData[1],
+            phoneno: userData[2]);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (content) => MainScreen(user: user)));
       }
     });
   }
@@ -172,13 +170,15 @@ class _LoginScreenState extends State<LoginScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Forgot Your Password ?", style: TextStyle(fontSize: 15)),
+            title:
+                Text("Forgot Your Password ?", style: TextStyle(fontSize: 15)),
             content: new Container(
                 height: 100,
                 child: SingleChildScrollView(
-                child: Column(
+                    child: Column(
                   children: [
-                    Text("Enter your recovery email: ", style: TextStyle(fontSize: 13)),
+                    Text("Enter your recovery email: ",
+                        style: TextStyle(fontSize: 13)),
                     TextField(
                       controller: _useremailController,
                       keyboardType: TextInputType.emailAddress,
@@ -214,8 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print(response.body);
       if (response.body == "success") {
         Fluttertoast.showToast(
-            msg:
-                "Please check your email.",
+            msg: "Please check your email.",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
